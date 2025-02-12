@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:activity_flutter/pages/home.dart';
 import 'package:activity_flutter/pages/register_form.dart';
 import 'package:activity_flutter/pages/register_pokemon.dart';
-import 'package:activity_flutter/pages/another.dart';
+import 'package:activity_flutter/pages/pokedex.dart';
 
 void main() {
   runApp(const MyApp());
@@ -101,14 +101,14 @@ class _DrwListView extends State<DrwListView>{
           title: Text("Register Pokemon"),
           leading: Icon(Icons.info),
           onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterPokemon()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>  RegisterPokemon()));
           },
         ),
         ListTile(
-          title: Text("Pokemon Details"),
+          title: Text("Pokedex"),
           leading: Icon(Icons.exit_to_app),
           onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const AnotherView()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const Pokedex()));
           },
         ),
       ],
