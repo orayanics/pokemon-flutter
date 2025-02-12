@@ -1,14 +1,14 @@
 import 'package:activity_flutter/main.dart';
 import 'package:flutter/material.dart';
 
-class Pokedex extends StatelessWidget{
+class Pokedex extends StatelessWidget {
   const Pokedex({super.key});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return MaterialApp(
       title: "Pokedex",
-      home: Scaffold (
+      home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: Text("Pokedex"),
@@ -18,7 +18,6 @@ class Pokedex extends StatelessWidget{
             children: [
               ImgSection(),
               TextSection(),
-
               PokemonDetails(),
               AnotherView(),
             ],
@@ -47,7 +46,8 @@ class _AnotherViewState extends State<AnotherView> {
           ElevatedButton(
             onPressed: () {
               // navigate back
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const MyApp()));
             },
             child: Text('Back'),
           )
@@ -72,23 +72,20 @@ class ImgSection extends StatelessWidget {
             image: AssetImage('assets/pokedex.jpg'),
             fit: BoxFit.fitHeight,
           ),
-
         ),
       ),
     );
   }
 }
 
-class TextSection extends StatelessWidget{
-  const TextSection ({super.key});
+class TextSection extends StatelessWidget {
+  const TextSection({super.key});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        padding: EdgeInsets.all(10),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             "Pokemon Name: Greninja",
             style: TextStyle(
@@ -104,74 +101,69 @@ class TextSection extends StatelessWidget{
               fontSize: 20,
               color: Colors.blue,
             ),
-
           ),
-
-
-        ]
-      )
-    );
+        ]));
   }
 }
 
 class PokemonDetails extends StatelessWidget {
-            const PokemonDetails({super.key});
+  const PokemonDetails({super.key});
 
-            @override
-            Widget build(BuildContext context) {
-              return Padding(
-                padding: EdgeInsets.all(10),
-                child: Container(
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: Border.all(
-                      color: Colors.red,
-                      width: 2.0,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Text(
-                            'Details',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Type: Water/Dark',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(
-                              'Abilities: Torrent, Protean',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          'Description: Greninja is a Water/Dark type Pokémon introduced in Generation 6. It is known as the Ninja Pokémon.',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Container(
+        decoration: ShapeDecoration(
+          color: Colors.white,
+          shape: Border.all(
+            color: Colors.red,
+            width: 2.0,
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  'Details',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
                 ),
-              );
-            }
-          }
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Type: Water/Dark',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    'Abilities: Torrent, Protean',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Description: Greninja is a Water/Dark type Pokémon introduced in Generation 6. It is known as the Ninja Pokémon.',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
