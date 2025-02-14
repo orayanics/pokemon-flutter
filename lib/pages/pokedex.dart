@@ -1,5 +1,8 @@
-import 'package:activity_flutter/main.dart';
 import 'package:flutter/material.dart';
+import 'package:activity_flutter/main.dart';
+import 'package:activity_flutter/pages/home.dart';
+import 'package:activity_flutter/pages/register_form.dart';
+import 'package:activity_flutter/pages/register_pokemon.dart';
 
 class Pokedex extends StatelessWidget {
   const Pokedex({super.key});
@@ -8,101 +11,75 @@ class Pokedex extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Pokedex",
+      theme: ThemeData(
+        brightness: Brightness.dark,
+      ),
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.red[900],
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Image.asset("assets/logo.png", width: 25, height: 25),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
+          ),
           centerTitle: true,
-          title: Text("Pokedex"),
+          title: const Text("Pokedex"),
         ),
         body: SingleChildScrollView(
           child: Column(
-            children: [
-              ImgSection(),
-              TextSection(),
+            children: const [
+              ImgTextSection(),
               PokemonDetails(),
               AnotherView(),
             ],
           ),
         ),
+        drawer: Drawer(
+            child: ListView(
+              children: [DrwHeader(), DrwListView()],
+            )),
       ),
     );
   }
 }
 
-class AnotherView extends StatefulWidget {
-  const AnotherView({super.key});
+class ImgTextSection extends StatelessWidget {
+  const ImgTextSection({super.key});
 
-  @override
-  _AnotherViewState createState() => _AnotherViewState();
-}
-
-class _AnotherViewState extends State<AnotherView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ElevatedButton(
-            onPressed: () {
-              // navigate back
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const MyApp()));
-            },
-            child: Text('Back'),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class ImgSection extends StatelessWidget {
-  const ImgSection({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(30),
-      child: Container(
-        height: 200.0,
-        width: double.maxFinite,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/pokedex.jpg'),
-            fit: BoxFit.fitHeight,
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white38,
+            ),
+            padding: const EdgeInsets.all(20),
+            child: Image.asset('assets/pokedex.jpg', height: 200),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class TextSection extends StatelessWidget {
-  const TextSection({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
+          const SizedBox(height: 10),
+          const Text(
             "Pokemon Name: Greninja",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: Colors.blue,
+              fontSize: 15,
+              color: Colors.white,
             ),
           ),
-          Text(
+          const Text(
             "Pokemon Number: 658",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: Colors.blue,
+              fontSize: 15,
+              color: Colors.white,
             ),
           ),
-        ]));
+        ],
+      ),
+    );
   }
 }
 
@@ -112,14 +89,10 @@ class PokemonDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Container(
-        decoration: ShapeDecoration(
-          color: Colors.white,
-          shape: Border.all(
-            color: Colors.red,
-            width: 2.0,
-          ),
+        decoration: BoxDecoration(
+          color: Colors.white38,
         ),
         child: Padding(
           padding: EdgeInsets.all(10),
@@ -132,6 +105,7 @@ class PokemonDetails extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -139,30 +113,50 @@ class PokemonDetails extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Type: Water/Dark',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    'Abilities: Torrent, Protean',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
+                  Text('Type: Water/Dark', style: TextStyle(color: Colors.black),),
+                  Text('Abilities: Torrent, Protean', style: TextStyle(color: Colors.black),),
                 ],
               ),
               SizedBox(height: 10),
               Text(
-                'Description: Greninja is a Water/Dark type Pokémon introduced in Generation 6. It is known as the Ninja Pokémon.',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
+                'Description: Greninja is a Water/Dark type Pokémon introduced in Generation 6. It is known as the Ninja Pokémon.',style: TextStyle(color: Colors.black),
               ),
             ],
           ),
         ),
+
+      ),
+    );
+  }
+}
+
+class AnotherView extends StatelessWidget {
+  const AnotherView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const MyApp()));
+            },
+            style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(20),
+                fixedSize: const Size(200, 50),
+                textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.red[900],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                )),
+            child: const Text('Back'),
+          )
+        ],
       ),
     );
   }
