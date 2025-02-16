@@ -71,9 +71,7 @@ class GymBadgesSection extends StatelessWidget {
                 height: 60,
                 child: Image.asset(
                   entry.value,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                  const Center(child: Text('No Image')),
+                  fit: BoxFit.cover
                 ),
               ),
               const SizedBox(height: 6),
@@ -109,14 +107,13 @@ class HallOfFameSection extends StatelessWidget {
         const SizedBox(height: 16),
         ListView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
           itemCount: mvpPokemons.length,
           itemBuilder: (context, index) {
             final entry = mvpPokemons.entries.elementAt(index);
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 8),
               child: ListTile(
-                title: Text('${entry.key} Gym MVP', style: Theme.of(context).textTheme.titleMedium),
+                title: Text('${entry.key} Gym Most Valuable Pokemon', style: Theme.of(context).textTheme.titleMedium),
                 subtitle: Text(entry.value),
               ),
             );
