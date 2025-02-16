@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:activity_flutter/main.dart';
-import 'package:activity_flutter/pages/home.dart';
-import 'package:activity_flutter/pages/register_form.dart';
-import 'package:activity_flutter/pages/register_pokemon.dart';
 
 class Pokedex extends StatelessWidget {
   const Pokedex({super.key});
