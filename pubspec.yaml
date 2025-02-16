@@ -69,6 +69,11 @@ flutter:
      - assets/logoRed.png
      - assets/logo.png
      - assets/balls/poke-ball.png
+     - assets/badges/pewter_badge.png
+     - assets/badges/cerulean_badge.png
+     - assets/badges/vermilion_badge.png
+     - assets/badges/celadon_badge.jpg
+     - assets/badges/fuchsia_badge.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

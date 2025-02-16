@@ -1,7 +1,9 @@
+import 'package:activity_flutter/pages/accolades.dart';
 import 'package:activity_flutter/pages/home.dart';
 import 'package:activity_flutter/pages/pokedex.dart';
 import 'package:activity_flutter/pages/register_form.dart';
 import 'package:activity_flutter/pages/register_pokemon.dart';
+import 'package:activity_flutter/pages/accolades.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -202,6 +204,14 @@ class _DrwListView extends State<DrwListView> {
                 MaterialPageRoute(builder: (context) => const Pokedex()));
           },
         ),
+        ListTile(
+          title: Text("Trainer Dashboard"),
+          leading: Icon(Icons.abc_sharp),
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Accolades()));
+          },
+        )
       ],
     );
   }
