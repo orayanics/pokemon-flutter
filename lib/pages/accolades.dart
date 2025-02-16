@@ -24,12 +24,18 @@ class Accolades extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            GymBadgesSection(),
-            HallOfFameSection(),
-            BackButtonSection(),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              GymBadgesSection(),
+              SizedBox(height: 30),
+              HallOfFameSection(),
+              SizedBox(height: 30),
+              BackButtonSection(),
+            ],
+          ),
         ),
       ),
     );
@@ -45,17 +51,19 @@ class GymBadgesSection extends StatelessWidget {
       'Pewter': 'assets/badges/pewter_badge.png',
       'Cerulean': 'assets/badges/cerulean_badge.png',
       'Vermilion': 'assets/badges/vermilion_badge.png',
-      'Celadon': 'assets/badges/celadon_badge.jpg',
+      'Celadon': 'assets/badges/celadon_badge.png',
       'Fuchsia': 'assets/badges/fuchsia_badge.png',
     };
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Gym Badges', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 10),
+        const SizedBox(height: 16),
         Wrap(
-          spacing: 10,
+          alignment: WrapAlignment.center,
+          spacing: 12,
+          runSpacing: 12,
           children: badgeImages.entries.map((entry) => Column(
             children: [
               SizedBox(
@@ -68,7 +76,7 @@ class GymBadgesSection extends StatelessWidget {
                   const Center(child: Text('No Image')),
                 ),
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               ElevatedButton(
                 onPressed: () {},
                 child: Text('${entry.key} Badge'),
@@ -87,26 +95,28 @@ class HallOfFameSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mvpPokemons = {
-      'Pewter': 'Onix - Rock/Ground | MVP of Pewter Gym',
-      'Cerulean': 'Starmie - Water/Psychic | MVP of Cerulean Gym',
-      'Vermilion': 'Raichu - Electric | MVP of Vermilion Gym',
-      'Celadon': 'Vileplume - Grass/Poison | MVP of Celadon Gym',
-      'Fuchsia': 'Weezing - Poison | MVP of Fuchsia Gym',
+      'Pewter': 'Onix - Rock/Ground | Moves: Rock Throw, Bind | Trainer: Brock',
+      'Cerulean': 'Starmie - Water/Psychic | Moves: Bubble Beam, Recover | Trainer: Misty',
+      'Vermilion': 'Raichu - Electric | Moves: Thunderbolt, Quick Attack | Trainer: Lt. Surge',
+      'Celadon': 'Vileplume - Grass/Poison | Moves: Petal Dance, Stun Spore | Trainer: Erika',
+      'Fuchsia': 'Weezing - Poison | Moves: Sludge, Explosion | Trainer: Koga',
     };
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Pokémon Hall of Fame', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 10),
+        const SizedBox(height: 16),
         ListView.builder(
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: mvpPokemons.length,
           itemBuilder: (context, index) {
             final entry = mvpPokemons.entries.elementAt(index);
             return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8),
               child: ListTile(
-                title: Text('${entry.key} Gym MVP'),
+                title: Text('${entry.key} Gym MVP', style: Theme.of(context).textTheme.titleMedium),
                 subtitle: Text(entry.value),
               ),
             );
@@ -119,17 +129,20 @@ class HallOfFameSection extends StatelessWidget {
 
 class BackButtonSection extends StatelessWidget {
   const BackButtonSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
-      child: ElevatedButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp())),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.all(15),
-          backgroundColor: Colors.red[900],
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Center(
+        child: ElevatedButton(
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp())),
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            backgroundColor: Colors.red[900],
+          ),
+          child: const Text('Back'),
         ),
-        child: const Text('Back'),
       ),
     );
   }
