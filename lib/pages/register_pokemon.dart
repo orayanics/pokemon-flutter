@@ -32,8 +32,18 @@ class RegisterPokemon extends StatelessWidget{
   Widget build(BuildContext context){
     return MaterialApp(
       title: "Register Pokemon",
+      theme: ThemeData(
+        brightness: Brightness.dark,
+      ),
       home: Scaffold (
         appBar: AppBar(
+          backgroundColor: Colors.red[900],
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Image.asset("assets/logo.png", width: 25, height: 25),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
+          ),
           centerTitle: true,
           title: Text("Pokemon Registration"),
         ),
@@ -74,6 +84,15 @@ class _PokeListState extends State<PokeList> {
               // navigate back
               Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp()));
             },
+            style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(20),
+                fixedSize: const Size(100, 50),
+                textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.red[900],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                )),
             child: Text('Back'),
           ),
           SizedBox(width: 20),
@@ -82,6 +101,15 @@ class _PokeListState extends State<PokeList> {
               // navigate back
               Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp()));
             },
+            style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(20),
+                fixedSize: const Size(110, 50),
+                textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.red[900],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                )),
             child: Text('Submit'),
           )
         ],
@@ -91,41 +119,51 @@ class _PokeListState extends State<PokeList> {
   }
 }
 
-class ImgSection extends StatelessWidget{
+class ImgSection extends StatelessWidget {
   const ImgSection({super.key});
 
-@override
-Widget build(BuildContext context){
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Column(
         children: [
-          Container(
-            height:150.0,
-            width: 150.0,
-            decoration:BoxDecoration(
-              image:DecorationImage(
-                image: AssetImage('assets/sprite.png'),
-                fit:BoxFit.fitHeight,
-              )
-            )
-          ),
-          Container(
-              height:150.0,
-              width: 150.0,
-              decoration:BoxDecoration(
-                  image:DecorationImage(
+          SizedBox(height: 20), // Adjust the height as needed
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                height: 150.0,
+                width: 150.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.red, width: 2.0),
+                  borderRadius: BorderRadius.circular(5),
+                  image: DecorationImage(
+                    image: AssetImage('assets/sprite.png'),
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              Container(
+                height: 150.0,
+                width: 150.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.red, width: 2.0),
+                  borderRadius: BorderRadius.circular(5),
+                  image: DecorationImage(
                     image: AssetImage('assets/pokemon.png'),
-                    fit:BoxFit.fitHeight,
-                  )
-              )
-          )
-
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
-      )
+      ),
     );
-}
+  }
 }
 
 class InptFieldSection extends StatelessWidget {
@@ -144,7 +182,12 @@ class InptFieldSection extends StatelessWidget {
             padding: EdgeInsets.all(30),
             child: TextField(
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: BorderSide(color: Colors.red, width: 2.0),
+                ),
+                fillColor: Colors.white,
+                filled: true,
                 hintText: "Pokemon Name",
                 hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
               ),
@@ -155,8 +198,9 @@ class InptFieldSection extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blue),
+                  border: Border.all(color: Colors.red),
                   borderRadius: BorderRadius.circular(5),
+                  color: Colors.white,
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: DropdownButtonHideUnderline(
@@ -170,7 +214,7 @@ class InptFieldSection extends StatelessWidget {
                           item,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.blue,
+                            color: Colors.red,
                           ),
                         ),
                       );
@@ -181,20 +225,29 @@ class InptFieldSection extends StatelessWidget {
                   ),
                 ),
               ),
-    SizedBox(width: 20),
-    Expanded(child: TextField(
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-    decoration: InputDecoration(
-    border: OutlineInputBorder(),
-    hintText: "Level",
-    hintMaxLines: 2,
-    hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)
-    ),
-    )
-    )
+              SizedBox(width: 20),
+              Expanded(
+                child: TextField(
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    ),
+                    fillColor: Colors.white,
+                    filled: true,
+                    hintText: "Level",
+                    hintMaxLines: 2,
+                    hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                  ),
+                ),
+              ),
             ],
           ),
-
         ],
       ),
     );
