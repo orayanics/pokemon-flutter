@@ -2,8 +2,8 @@ import 'package:activity_flutter/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class RegisterPokemon extends StatelessWidget{
-   RegisterPokemon({super.key});
+class RegisterPokemon extends StatelessWidget {
+  RegisterPokemon({super.key});
 
   final String dropdownValue = 'Normal';
 
@@ -29,13 +29,13 @@ class RegisterPokemon extends StatelessWidget{
   ];
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return MaterialApp(
       title: "Register Pokemon",
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
-      home: Scaffold (
+      home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.red[900],
           leading: Builder(
@@ -47,17 +47,19 @@ class RegisterPokemon extends StatelessWidget{
           centerTitle: true,
           title: Text("Pokemon Registration"),
         ),
+        drawer: Drawer(
+          child: ListView(
+            children: [DrwHeader(), DrwListView()],
+          ),
+        ),
         body: SingleChildScrollView(
-          child:Column(
-            children: [
-          ImgSection(),
-              InptFieldSection(items: items),
-              PokeList(),
-
-            ],
-          )
-        )
-        ,
+            child: Column(
+          children: [
+            ImgSection(),
+            InptFieldSection(items: items),
+            PokeList(),
+          ],
+        )),
       ),
     );
   }
@@ -74,48 +76,51 @@ class _PokeListState extends State<PokeList> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(30),
-      child: Center(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              // navigate back
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp()));
-            },
-            style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(20),
-                fixedSize: const Size(100, 50),
-                textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.red[900],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
-            child: Text('Back'),
+        padding: EdgeInsets.all(30),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  // navigate back
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const MyApp()));
+                },
+                style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(20),
+                    fixedSize: const Size(100, 60),
+                    textStyle: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.red[900],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    )),
+                child: Text('Back'),
+              ),
+              SizedBox(width: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // navigate back
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const MyApp()));
+                },
+                style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(20),
+                    fixedSize: const Size(110, 60),
+                    textStyle: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.red[900],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    )),
+                child: Text('Submit'),
+              )
+            ],
           ),
-          SizedBox(width: 20),
-          ElevatedButton(
-            onPressed: () {
-              // navigate back
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp()));
-            },
-            style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(20),
-                fixedSize: const Size(110, 50),
-                textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.red[900],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                )),
-            child: Text('Submit'),
-          )
-        ],
-      ),
-          )
-    );
+        ));
   }
 }
 
@@ -136,8 +141,7 @@ class ImgSection extends StatelessWidget {
                 height: 150.0,
                 width: 150.0,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.red, width: 2.0),
+                  color: Colors.white38,
                   borderRadius: BorderRadius.circular(5),
                   image: DecorationImage(
                     image: AssetImage('assets/sprite.png'),
@@ -149,8 +153,7 @@ class ImgSection extends StatelessWidget {
                 height: 150.0,
                 width: 150.0,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.red, width: 2.0),
+                  color: Colors.white38,
                   borderRadius: BorderRadius.circular(5),
                   image: DecorationImage(
                     image: AssetImage('assets/pokemon.png'),
@@ -184,12 +187,12 @@ class InptFieldSection extends StatelessWidget {
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(color: Colors.red, width: 2.0),
                 ),
                 fillColor: Colors.white,
                 filled: true,
                 hintText: "Pokemon Name",
-                hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                hintStyle:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
               ),
             ),
           ),
@@ -198,7 +201,6 @@ class InptFieldSection extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.red),
                   borderRadius: BorderRadius.circular(5),
                   color: Colors.white,
                 ),
@@ -232,7 +234,6 @@ class InptFieldSection extends StatelessWidget {
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
-                      borderSide: BorderSide(color: Colors.red, width: 2.0),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
@@ -242,7 +243,8 @@ class InptFieldSection extends StatelessWidget {
                     filled: true,
                     hintText: "Level",
                     hintMaxLines: 2,
-                    hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                    hintStyle: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.red),
                   ),
                 ),
               ),

@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Pokemon App",
+      title: "PokeWorld",
       home: const Home(),
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -80,8 +80,8 @@ class HomeContent extends StatelessWidget {
           },
           style: ElevatedButton.styleFrom(
               padding: EdgeInsets.all(20),
-              fixedSize: Size(200, 50),
-              textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              fixedSize: Size(200, 60),
+              textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               foregroundColor: Colors.white,
               backgroundColor: Colors.red[900],
               shape: RoundedRectangleBorder(
@@ -151,7 +151,7 @@ class _DrwHeader extends State<DrwHeader> {
             radius: 43.0,
           ),
           SizedBox(height: 15),
-          Text("Pokemon App",
+          Text("PokeWorld",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,

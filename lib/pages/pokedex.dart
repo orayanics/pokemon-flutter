@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:activity_flutter/main.dart';
+import 'package:flutter/material.dart';
 
 class Pokedex extends StatelessWidget {
   const Pokedex({super.key});
@@ -34,8 +34,8 @@ class Pokedex extends StatelessWidget {
         ),
         drawer: Drawer(
             child: ListView(
-              children: [DrwHeader(), DrwListView()],
-            )),
+          children: [DrwHeader(), DrwListView()],
+        )),
       ),
     );
   }
@@ -110,18 +110,24 @@ class PokemonDetails extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Type: Water/Dark', style: TextStyle(color: Colors.black),),
-                  Text('Abilities: Torrent, Protean', style: TextStyle(color: Colors.black),),
+                  Text(
+                    'Type: Water/Dark',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  Text(
+                    'Abilities: Torrent, Protean',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ],
               ),
               SizedBox(height: 10),
               Text(
-                'Description: Greninja is a Water/Dark type Pokémon introduced in Generation 6. It is known as the Ninja Pokémon.',style: TextStyle(color: Colors.black),
+                'Description: Greninja is a Water/Dark type Pokémon introduced in Generation 6. It is known as the Ninja Pokémon.',
+                style: TextStyle(color: Colors.black),
               ),
             ],
           ),
         ),
-
       ),
     );
   }
@@ -144,8 +150,9 @@ class AnotherView extends StatelessWidget {
             },
             style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(20),
-                fixedSize: const Size(200, 50),
-                textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                fixedSize: const Size(200, 60),
+                textStyle:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.red[900],
                 shape: RoundedRectangleBorder(

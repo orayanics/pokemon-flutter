@@ -1,6 +1,6 @@
 import 'package:activity_flutter/main.dart';
-import 'package:flutter/material.dart';
 import 'package:activity_flutter/pages/accolades.dart';
+import 'package:flutter/material.dart';
 
 class RegisterForm extends StatelessWidget {
   const RegisterForm({super.key});
@@ -29,7 +29,7 @@ class RegisterForm extends StatelessWidget {
   }
 }
 
-const List<String> generations = <String>['One', 'Two', 'Three', 'Four'];
+const List<String> generations = <String>['Male', 'Female', 'Others'];
 const List<String> regions = <String>['One', 'Two', 'Three', 'Four'];
 
 class RegisterView extends StatefulWidget {
@@ -158,9 +158,9 @@ class _RegisterViewState extends State<RegisterView> {
                 },
                 style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(20),
-                    fixedSize: Size(200, 50),
+                    fixedSize: Size(150, 60),
                     textStyle:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.red[900],
                     shape: RoundedRectangleBorder(
@@ -179,7 +179,7 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
               ),
               SizedBox(
-                width: 20,
+                width: 10,
               ),
               ElevatedButton(
                 onPressed: () {
@@ -190,9 +190,9 @@ class _RegisterViewState extends State<RegisterView> {
                 },
                 style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(20),
-                    fixedSize: Size(200, 50),
+                    fixedSize: Size(150, 60),
                     textStyle:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.red[900],
                     shape: RoundedRectangleBorder(
