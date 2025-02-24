@@ -19,4 +19,18 @@ class FieldValidators {
     }
     return null;
   }
+
+  static String? validateHome(String value){
+    if(value.isEmpty){
+      return 'Home Town is required';
+    }
+    return null;
+  }
+
+  static String? validateGender(String value){
+    if(value.isEmpty){
+      return 'Gender is required';
+    }
+    return null;
+  }
 }

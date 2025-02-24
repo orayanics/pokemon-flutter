@@ -11,6 +11,10 @@ final _trainerAge = TextEditingController();
 bool _validateAge = false;
 String? _ageErrorText;
 
+final _homeTown = TextEditingController();
+bool _validateHome = false;
+
+bool _validateGender = false;
 
 class RegisterForm extends StatelessWidget {
   const RegisterForm({super.key});
@@ -58,6 +62,8 @@ class _RegisterViewState extends State<RegisterView> {
       _validateName = FieldValidators.validateTrainerName(_trainerName.text) != null;
       _ageErrorText = FieldValidators.validateAge(_trainerAge.text);
       _validateAge = _ageErrorText != null;
+      _validateHome = FieldValidators.validateHome(_homeTown.text) != null;
+      _validateGender = FieldValidators.validateGender(genValues) != null;
     });
   }
          String genValues = generations.first;
@@ -72,6 +78,7 @@ class _RegisterViewState extends State<RegisterView> {
                  mainAxisAlignment: MainAxisAlignment.center,
                  children: [
                    TextFormField(
+                     controller: _trainerName,
                      keyboardType: TextInputType.text,
                      inputFormatters: [
                         FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
@@ -90,6 +97,7 @@ class _RegisterViewState extends State<RegisterView> {
                        Expanded(
                          flex: 1,
                          child: TextFormField(
+                           controller: _trainerAge,
                            keyboardType: TextInputType.number,
                            inputFormatters: [
                               FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -112,7 +120,8 @@ class _RegisterViewState extends State<RegisterView> {
                            style: const TextStyle(color: Colors.white30),
                            decoration: InputDecoration(
                              border: OutlineInputBorder(),
-                             labelText: 'Gender'
+                             labelText: 'Gender',
+                             errorText: _validateGender ? "Gender is required" : null,
                            ),
                            items: generations.map<DropdownMenuItem<String>>((String value) {
                              return DropdownMenuItem<String>(
@@ -123,6 +132,7 @@ class _RegisterViewState extends State<RegisterView> {
                            onChanged: (String? value) {
                              setState(() {
                                genValues = value!;
+                               _validateGender = FieldValidators.validateGender(genValues) != null;
                              });
                            },
                          ),
@@ -131,9 +141,14 @@ class _RegisterViewState extends State<RegisterView> {
                    ),
                    SizedBox(height: 10),
                    TextFormField(
+                     controller: _homeTown,
+                     inputFormatters: [
+                       LengthLimitingTextInputFormatter(100)
+                     ],
                      decoration: InputDecoration(
                        labelText: 'Home Town',
                        border: OutlineInputBorder(),
+                       errorText: _validateHome ? 'Home Town is required' : null,
                      ),
                    ),
                    SizedBox(height: 10),
