@@ -16,6 +16,20 @@ bool _validateHome = false;
 
 bool _validateGender = false;
 
+bool _validateTrainerType = false;
+
+final _trainerID = TextEditingController();
+bool _validateTrainerID = false;
+
+final _trainerEmail = TextEditingController();
+bool _validateEmail = false;
+
+String? _emailErrorText;
+
+final _trainerContact = TextEditingController();
+bool _validateContact = false;
+String? _contactErrorText;
+
 class RegisterForm extends StatelessWidget {
   const RegisterForm({super.key});
 
@@ -64,6 +78,12 @@ class _RegisterViewState extends State<RegisterView> {
       _validateAge = _ageErrorText != null;
       _validateHome = FieldValidators.validateHome(_homeTown.text) != null;
       _validateGender = FieldValidators.validateGender(genValues) != null;
+      _validateTrainerID =  FieldValidators.validateTrainerID(_trainerID.text) != null;
+      _emailErrorText = FieldValidators.validateTrainerEmail(_trainerEmail.text);
+      _validateEmail = _emailErrorText != null;
+      _contactErrorText = FieldValidators.validateContact(_trainerContact.text);
+      _validateContact = _contactErrorText != null;
+
     });
   }
          String genValues = generations.first;
@@ -160,6 +180,7 @@ class _RegisterViewState extends State<RegisterView> {
                      decoration: InputDecoration(
                        border: OutlineInputBorder(),
                        labelText: 'Trainer Type',
+                       errorText: _validateTrainerType ? "Trainer Type is required" : null,
                      ),
                      items: trainerType.map<DropdownMenuItem<String>>((String value) {
                        return DropdownMenuItem<String>(
@@ -170,11 +191,15 @@ class _RegisterViewState extends State<RegisterView> {
                      onChanged: (String? value) {
                        setState(() {
                          trainerTypeValues = value!;
+                          _validateTrainerType = FieldValidators.validateTrainerType(trainerTypeValues) != null;
                        });
                      },
                    ),
                    SizedBox(height: 10),
                    TextFormField(
+                     inputFormatters: [
+                        LengthLimitingTextInputFormatter(50)
+                     ],
                      decoration: InputDecoration(
                        labelText: 'Favorite Pokemon',
                        border: OutlineInputBorder(),
@@ -182,9 +207,16 @@ class _RegisterViewState extends State<RegisterView> {
                    ),
                    SizedBox(height: 10),
                    TextFormField(
+                     controller: _trainerID,
+                     keyboardType: TextInputType.number,
+                     inputFormatters: [
+                       LengthLimitingTextInputFormatter(6)
+                     ],
                      decoration: InputDecoration(
-                       labelText: 'Pokedex ID',
+                       labelText: 'Trainer ID',
                        border: OutlineInputBorder(),
+                       errorText: _validateTrainerID ? 'Trainer ID is required' : null,
+                       hintText: '6-digit ID',
                      ),
                    ),
                    SizedBox(height: 10),
@@ -194,19 +226,31 @@ class _RegisterViewState extends State<RegisterView> {
                        Expanded(
                          flex: 1,
                          child: TextFormField(
+                           controller: _trainerEmail,
+                           inputFormatters: [
+                              LengthLimitingTextInputFormatter(50),
+                           ],
                            decoration: InputDecoration(
                              labelText: 'Email',
                              border: OutlineInputBorder(),
+                             errorText: _validateEmail ? _emailErrorText : null,
                            ),
+                           keyboardType: TextInputType.emailAddress,
                          ),
                        ),
                        SizedBox(width: 10),
                        Expanded(
                          flex: 1,
                          child: TextFormField(
+                           controller: _trainerContact,
+                           keyboardType: TextInputType.phone,
+                           inputFormatters: [
+                              LengthLimitingTextInputFormatter(11),
+                           ],
                            decoration: InputDecoration(
                              labelText: 'Contact Number',
                              border: OutlineInputBorder(),
+                             errorText: _validateContact ? _contactErrorText : null,
                            ),
                          ),
                        ),
