@@ -4,7 +4,7 @@ import 'package:activity_flutter/pages/accolades.dart';
 import 'package:activity_flutter/pages/register_form.dart';
 import 'package:activity_flutter/pages/register_pokemon.dart';
 import 'package:http/http.dart' as http;
-import 'package:activity_flutter/validators/pokemon_register_validator.dart';
+import 'package:activity_flutter/validators/pokedex_validator.dart';
 import 'dart:convert';
 
 
@@ -41,30 +41,51 @@ class _PokedexState extends State<Pokedex> {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
+      // Fetch Pokémon species data for the description
+      final speciesResponse = await http.get(Uri.parse("https://pokeapi.co/api/v2/pokemon-species/${data['id']}"));
+      String description = "No description available.";
+
+      if (speciesResponse.statusCode == 200) {
+        final speciesData = jsonDecode(speciesResponse.body);
+        final flavorTextEntries = speciesData['flavor_text_entries'];
+
+        // Ensure we find an English description
+        var englishEntries = flavorTextEntries
+            .where((entry) => entry['language']['name'] == 'en')
+            .toList();
+
+        if (englishEntries.isNotEmpty) {
+          description = englishEntries.first['flavor_text']
+              .replaceAll("\n", " ")
+              .replaceAll("\f", " ");
+        }
+      }
+
       setState(() {
         _validatePokemon = false;
         _pokemonErrorText = null;
         pokemonName = data['name'].toString().toUpperCase();
         pokemonNumber = data['id'].toString();
-        pokemonType = data['types'].map((type) => type['type']['name']).join("/").toUpperCase();
+        pokemonType = data['types']
+            .map((type) => type['type']['name'])
+            .join("/")
+            .toUpperCase();
         pokemonAbilities = data['abilities']
             .map((ability) => ability['ability']['name'])
             .join(", ")
             .toUpperCase();
         pokemonImage = data['sprites']['other']['official-artwork']['front_default'] ??
             "https://via.placeholder.com/150";
-        pokemonDescription = "Some description";
+        pokemonDescription = description; // Ensure this updates correctly
       });
     } else {
-      // Handle invalid Pokémon: Retain the previous name and number
       setState(() {
         _pokemonErrorText = "Pokémon does not exist.";
         _validatePokemon = true;
-
       });
-
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
