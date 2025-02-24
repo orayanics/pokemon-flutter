@@ -4,15 +4,70 @@ import 'package:activity_flutter/pages/accolades.dart';
 import 'package:activity_flutter/pages/register_form.dart';
 import 'package:activity_flutter/pages/register_pokemon.dart';
 import 'package:http/http.dart' as http;
+import 'package:activity_flutter/validators/pokemon_register_validator.dart';
 import 'dart:convert';
+
 
 class Pokedex extends StatefulWidget {
   const Pokedex({super.key});
 
   @override
   State<Pokedex> createState() => _PokedexState();
+}
 
-  Widget build(BuildContext context, _PokedexState state) {
+class _PokedexState extends State<Pokedex> {
+  String pokemonName = "Bulbasaur";
+  String pokemonNumber = "1";
+  String pokemonType = "GRASS/POISON";
+  String pokemonAbilities = "OVERGROW, CHLOROPHYLL";
+  String pokemonDescription =
+      "Bulbasaur is a small, quadrupedal amphibian Pokémon that has blue-green skin with darker patches.";
+  String pokemonImage =
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png";
+
+  bool _validatePokemon = false;
+  String? _pokemonErrorText;
+
+  void ValidateFields(String input) {
+    setState(() {
+      _pokemonErrorText = FieldValidators.validatePokemon(input);
+      _validatePokemon = _pokemonErrorText != null;
+    });
+  }
+
+  Future<void> fetchPokemon(String name) async {
+    final response = await http.get(Uri.parse("https://pokeapi.co/api/v2/pokemon/$name"));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      setState(() {
+        _validatePokemon = false;
+        _pokemonErrorText = null;
+        pokemonName = data['name'].toString().toUpperCase();
+        pokemonNumber = data['id'].toString();
+        pokemonType = data['types'].map((type) => type['type']['name']).join("/").toUpperCase();
+        pokemonAbilities = data['abilities']
+            .map((ability) => ability['ability']['name'])
+            .join(", ")
+            .toUpperCase();
+        pokemonImage = data['sprites']['other']['official-artwork']['front_default'] ??
+            "https://via.placeholder.com/150";
+        pokemonDescription = "Some description";
+      });
+    } else {
+      // Handle invalid Pokémon: Retain the previous name and number
+      setState(() {
+        _pokemonErrorText = "Pokémon does not exist.";
+        _validatePokemon = true;
+
+      });
+
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       title: "Pokedex",
       theme: ThemeData(
@@ -34,15 +89,18 @@ class Pokedex extends StatefulWidget {
           child: Column(
             children: [
               ImgTextSection(
-                pokemonName: state.pokemonName,
-                pokemonNumber: state.pokemonNumber,
-                pokemonImage: state.pokemonImage,
-                onSearch: state.fetchPokemon,
+                pokemonName: pokemonName,
+                pokemonNumber: pokemonNumber,
+                pokemonImage: pokemonImage,
+                onSearch: fetchPokemon,
+                validatePokemon: _validatePokemon,
+                pokemonErrorText: _pokemonErrorText,
+                validateFields: ValidateFields,
               ),
               PokemonDetails(
-                type: state.pokemonType,
-                abilities: state.pokemonAbilities,
-                description: state.pokemonDescription,
+                type: pokemonType,
+                abilities: pokemonAbilities,
+                description: pokemonDescription,
               ),
               AnotherView(),
             ],
@@ -59,70 +117,14 @@ class Pokedex extends StatefulWidget {
 }
 
 
-class _PokedexState extends State<Pokedex> {
-  String pokemonName = "Bulbasaur";
-  String pokemonNumber = "1";
-  String pokemonType = "GRASS/POISON";
-  String pokemonAbilities = "OVERGROW, CHLOROPHYLL";
-  String pokemonDescription =
-      "Bulbasaur is a small, quadrupedal amphibian Pokémon that has blue-green skin with darker patches.";
-  String pokemonImage =
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png";
-
-  Future<void> fetchPokemon(String name) async {
-    final response =
-    await http.get(Uri.parse("https://pokeapi.co/api/v2/pokemon/$name"));
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-
-      // Fetch species data for the description
-      final speciesResponse = await http
-          .get(Uri.parse("https://pokeapi.co/api/v2/pokemon-species/${data['id']}"));
-
-      String description = "No description available.";
-      if (speciesResponse.statusCode == 200) {
-        final speciesData = jsonDecode(speciesResponse.body);
-        final flavorTextEntries = speciesData['flavor_text_entries'];
-        final englishEntry = flavorTextEntries.firstWhere(
-              (entry) => entry['language']['name'] == 'en',
-          orElse: () => null,
-        );
-
-        if (englishEntry != null) {
-          description = englishEntry['flavor_text'].replaceAll("\n", " ");
-        }
-      }
-
-      setState(() {
-        pokemonName = data['name'].toString().toUpperCase();
-        pokemonNumber = data['id'].toString();
-        pokemonType = data['types']
-            .map((type) => type['type']['name'])
-            .join("/")
-            .toUpperCase();
-        pokemonAbilities = data['abilities']
-            .map((ability) => ability['ability']['name'])
-            .join(", ")
-            .toUpperCase();
-        pokemonImage = data['sprites']['other']['official-artwork']['front_default'] ??
-            "https://via.placeholder.com/150";
-        pokemonDescription = description;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.build(context, this);
-  }
-}
-
 class ImgTextSection extends StatelessWidget {
-  final String pokemonName;
-  final String pokemonNumber;
+  final String? pokemonName;
+  final String? pokemonNumber;
   final String pokemonImage;
   final Function(String) onSearch;
+  final bool validatePokemon;
+  final String? pokemonErrorText;
+  final Function(String) validateFields;
 
   const ImgTextSection({
     super.key,
@@ -130,6 +132,9 @@ class ImgTextSection extends StatelessWidget {
     required this.pokemonNumber,
     required this.pokemonImage,
     required this.onSearch,
+    required this.validatePokemon,
+    required this.pokemonErrorText,
+    required this.validateFields,
   });
 
   @override
@@ -143,11 +148,20 @@ class ImgTextSection extends StatelessWidget {
           TextField(
             controller: searchController,
             decoration: InputDecoration(
-              hintText: "Enter Pokémon name",
+              hintText: "Enter Pokémon name or ID",
+              errorText: validatePokemon ? pokemonErrorText : null,
               suffixIcon: IconButton(
                 icon: const Icon(Icons.search),
-                onPressed: () => onSearch(searchController.text.toLowerCase()),
+                onPressed: () {
+                  String searchText = searchController.text.trim().toLowerCase();
+                  if (searchText.isEmpty) {
+                    validateFields(searchText);
+                    return;
+                  }
+                  onSearch(searchText);
+                },
               ),
+
               filled: true,
               fillColor: Colors.white38,
               border: OutlineInputBorder(
@@ -192,6 +206,7 @@ class ImgTextSection extends StatelessWidget {
     );
   }
 }
+
 
 class PokemonDetails extends StatelessWidget {
   final String type;
