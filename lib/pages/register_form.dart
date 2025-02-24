@@ -1,6 +1,16 @@
 import 'package:activity_flutter/main.dart';
 import 'package:activity_flutter/pages/accolades.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:activity_flutter/validators/trainer_register_validator.dart';
+
+final _trainerName = TextEditingController();
+bool _validateName = false;
+
+final _trainerAge = TextEditingController();
+bool _validateAge = false;
+String? _ageErrorText;
+
 
 class RegisterForm extends StatelessWidget {
   const RegisterForm({super.key});
@@ -30,7 +40,7 @@ class RegisterForm extends StatelessWidget {
 }
 
 const List<String> generations = <String>['Male', 'Female', 'Others'];
-const List<String> regions = <String>['One', 'Two', 'Three', 'Four'];
+const List<String> trainerType = <String>['Beginner', 'Novice','Gym Leader', 'Breeder', 'Elite Four'];
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -40,180 +50,215 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-  String genValues = generations.first;
-  String regValues = regions.first;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: 'Nickname',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 10),
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: 'Favorite Pokemon',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            DropdownButton(
-              value: genValues,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: const TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
-              ),
-              items: generations.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? value) {
-                setState(() {
-                  genValues = value!;
-                });
-              },
-            ),
-            DropdownButton(
-              value: regValues,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: const TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
-              ),
-              items: regions.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? value) {
-                setState(() {
-                  regValues = value!;
-                });
-              },
-            ),
-          ]),
-          Row(
-            children: [
-              Expanded(
-                  child: TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Fave Type',
-                  border: OutlineInputBorder(),
-                ),
-              )),
-              SizedBox(width: 10),
-              Expanded(
-                  child: TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Fave Region',
-                  border: OutlineInputBorder(),
-                ),
-              )),
-              SizedBox(width: 10),
-              Expanded(
-                  child: TextFormField(
-                decoration: InputDecoration(
-                    labelText: 'Fave Generation', border: OutlineInputBorder()),
-              )),
-            ],
-          ),
-          SizedBox(height: 10),
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: 'Fave Trainer',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 10),
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: 'Fave Game',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const MyApp()));
-                },
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(20),
-                    fixedSize: Size(150, 60),
-                    textStyle:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.red[900],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    )),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
-                    SizedBox(width: 10),
-                    Text("Back"),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Accolades()));
-                },
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(20),
-                    fixedSize: Size(150, 60),
-                    textStyle:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.red[900],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    )),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Submit"),
-                    SizedBox(width: 10),
-                    Icon(
-                      Icons.arrow_forward,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
+  String? _ageErrorText;
+
+  void ValidateFields() {
+    setState(() {
+      _validateName = FieldValidators.validateTrainerName(_trainerName.text) != null;
+      _ageErrorText = FieldValidators.validateAge(_trainerAge.text);
+      _validateAge = _ageErrorText != null;
+    });
   }
-}
+         String genValues = generations.first;
+         String trainerTypeValues = trainerType.first;
+
+         @override
+         Widget build(BuildContext context) {
+           return Padding(
+             padding: EdgeInsets.all(10),
+             child: SingleChildScrollView(
+               child: Column(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                   TextFormField(
+                     keyboardType: TextInputType.text,
+                     inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                        LengthLimitingTextInputFormatter(50)
+                     ],
+                     decoration: InputDecoration(
+                       labelText: 'Trainer Name',
+                       border: OutlineInputBorder(),
+                        errorText: _validateName ? 'Trainer Name is required' : null,
+                     ),
+                   ),
+                   SizedBox(height: 10),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Expanded(
+                         flex: 1,
+                         child: TextFormField(
+                           keyboardType: TextInputType.number,
+                           inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                              LengthLimitingTextInputFormatter(2)
+                           ],
+                           decoration: InputDecoration(
+                             labelText: 'Age',
+                             border: OutlineInputBorder(),
+                             errorText: _validateAge ? _ageErrorText : null,
+                           ),
+                         ),
+                       ),
+                       SizedBox(width: 10),
+                       Expanded(
+                         flex: 1,
+                         child: DropdownButtonFormField(
+                           value: genValues,
+                           icon: const Icon(Icons.arrow_downward),
+                           elevation: 16,
+                           style: const TextStyle(color: Colors.white30),
+                           decoration: InputDecoration(
+                             border: OutlineInputBorder(),
+                             labelText: 'Gender'
+                           ),
+                           items: generations.map<DropdownMenuItem<String>>((String value) {
+                             return DropdownMenuItem<String>(
+                               value: value,
+                               child: Text(value),
+                             );
+                           }).toList(),
+                           onChanged: (String? value) {
+                             setState(() {
+                               genValues = value!;
+                             });
+                           },
+                         ),
+                       ),
+                     ],
+                   ),
+                   SizedBox(height: 10),
+                   TextFormField(
+                     decoration: InputDecoration(
+                       labelText: 'Home Town',
+                       border: OutlineInputBorder(),
+                     ),
+                   ),
+                   SizedBox(height: 10),
+                   DropdownButtonFormField(
+                     value: trainerTypeValues,
+                     icon: const Icon(Icons.arrow_downward),
+                     elevation: 16,
+                     style: const TextStyle(color: Colors.white30),
+                     decoration: InputDecoration(
+                       border: OutlineInputBorder(),
+                       labelText: 'Trainer Type',
+                     ),
+                     items: trainerType.map<DropdownMenuItem<String>>((String value) {
+                       return DropdownMenuItem<String>(
+                         value: value,
+                         child: Text(value),
+                       );
+                     }).toList(),
+                     onChanged: (String? value) {
+                       setState(() {
+                         trainerTypeValues = value!;
+                       });
+                     },
+                   ),
+                   SizedBox(height: 10),
+                   TextFormField(
+                     decoration: InputDecoration(
+                       labelText: 'Favorite Pokemon',
+                       border: OutlineInputBorder(),
+                     ),
+                   ),
+                   SizedBox(height: 10),
+                   TextFormField(
+                     decoration: InputDecoration(
+                       labelText: 'Pokedex ID',
+                       border: OutlineInputBorder(),
+                     ),
+                   ),
+                   SizedBox(height: 10),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Expanded(
+                         flex: 1,
+                         child: TextFormField(
+                           decoration: InputDecoration(
+                             labelText: 'Email',
+                             border: OutlineInputBorder(),
+                           ),
+                         ),
+                       ),
+                       SizedBox(width: 10),
+                       Expanded(
+                         flex: 1,
+                         child: TextFormField(
+                           decoration: InputDecoration(
+                             labelText: 'Contact Number',
+                             border: OutlineInputBorder(),
+                           ),
+                         ),
+                       ),
+                     ],
+                   ),
+                   SizedBox(height: 20),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     crossAxisAlignment: CrossAxisAlignment.center,
+                     children: [
+                       ElevatedButton(
+                         onPressed: () {
+                           Navigator.push(context,
+                               MaterialPageRoute(builder: (context) => const MyApp()));
+                         },
+                         style: ElevatedButton.styleFrom(
+                             padding: EdgeInsets.all(20),
+                             fixedSize: Size(150, 60),
+                             textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                             foregroundColor: Colors.white,
+                             backgroundColor: Colors.red[900],
+                             shape: RoundedRectangleBorder(
+                               borderRadius: BorderRadius.circular(10),
+                             )),
+                         child: Row(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                             Icon(
+                               Icons.arrow_back,
+                               color: Colors.white,
+                             ),
+                             SizedBox(width: 10),
+                             Text("Back"),
+                           ],
+                         ),
+                       ),
+                       SizedBox(width: 10),
+                       ElevatedButton(
+                         onPressed: () {
+                            ValidateFields();
+                         },
+                         style: ElevatedButton.styleFrom(
+                             padding: EdgeInsets.all(20),
+                             fixedSize: Size(150, 60),
+                             textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                             foregroundColor: Colors.white,
+                             backgroundColor: Colors.red[900],
+                             shape: RoundedRectangleBorder(
+                               borderRadius: BorderRadius.circular(10),
+                             )),
+                         child: Row(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                             Text("Submit"),
+                             SizedBox(width: 10),
+                             Icon(
+                               Icons.arrow_forward,
+                               color: Colors.white,
+                             ),
+                           ],
+                         ),
+                       ),
+                     ],
+                   ),
+                 ],
+               ),
+             ),
+           );
+         }
+       }
