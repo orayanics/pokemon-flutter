@@ -76,7 +76,7 @@ class _PokedexState extends State<Pokedex> {
             .toUpperCase();
         pokemonImage = data['sprites']['other']['official-artwork']['front_default'] ??
             "https://via.placeholder.com/150";
-        pokemonDescription = description; // Ensure this updates correctly
+        pokemonDescription = description; 
       });
     } else {
       setState(() {
@@ -208,7 +208,7 @@ class ImgTextSection extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            "Pokemon Name: $pokemonName",
+            "Pokémon Name: $pokemonName",
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 15,
@@ -216,7 +216,7 @@ class ImgTextSection extends StatelessWidget {
             ),
           ),
           Text(
-            "Pokemon Number: $pokemonNumber",
+            "Pokémon Number: $pokemonNumber",
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 15,
@@ -245,54 +245,53 @@ class PokemonDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(16),
       child: Container(
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.black54,
+          border: Border.all(color: Colors.red[900]!, width: 3),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.red[900]!, width: 2),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Center(
-                child: Text(
-                  'Details',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Type: $type',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    'Abilities: $abilities',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Description: $description',
-                style: const TextStyle(color: Colors.white),
-              ),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Pokémon Details',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 16),
+            _buildDetailCard(context, 'Type', type),
+            _buildDetailCard(context, 'Abilities', abilities),
+            _buildDetailCard(context, 'Description', description),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailCard(BuildContext context, String title, String content) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: ListTile(
+        title: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        subtitle: Text(
+          content,
+          textAlign: TextAlign.center,
         ),
       ),
     );
   }
 }
+
+
 
 class AnotherView extends StatelessWidget {
   const AnotherView({super.key});
@@ -311,7 +310,7 @@ class AnotherView extends StatelessWidget {
             },
             style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(20),
-                fixedSize: const Size(200, 60),
+                fixedSize: const Size(150, 60),
                 textStyle:
                 const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 foregroundColor: Colors.white,
@@ -319,7 +318,14 @@ class AnotherView extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 )),
-            child: const Text('Back'),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.arrow_back, color: Colors.white),
+                const SizedBox(width: 5),
+                const Text('Back'),
+              ],
+            ),
           )
         ],
       ),

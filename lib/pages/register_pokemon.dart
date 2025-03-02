@@ -1,15 +1,41 @@
 import 'package:activity_flutter/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:activity_flutter/validators/pokemon_register_validator.dart';
 
-class RegisterPokemon extends StatelessWidget {
+
+final _pokemonName = TextEditingController();
+bool _validateName = false;
+
+final _pokemonLevel = TextEditingController();
+bool _validateLevel = false;
+String? _levelErrorText;
+
+class RegisterPokemon extends StatefulWidget {
   RegisterPokemon({super.key});
 
+  @override
+  _RegisterPokemonState createState() => _RegisterPokemonState();
+}
+
+class _RegisterPokemonState extends State<RegisterPokemon> {
   final List<String> items = [
     'Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting',
     'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost',
     'Dark', 'Dragon', 'Steel', 'Fairy'
   ];
+
+  final GlobalKey<_InptFieldSectionState> _formKey = GlobalKey();
+
+  void validateAndSubmit() {
+    _formKey.currentState?.ValidateFields();
+
+    if (!_formKey.currentState!._validateName && !_formKey.currentState!._validateLevel) {
+      // If no validation errors, navigate to MyApp
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp()));
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +47,6 @@ class RegisterPokemon extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.red[900],
-          leading: Builder(
-            builder: (context) => IconButton(
-              icon: Image.asset("assets/logo.png", width: 25, height: 25),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            ),
-          ),
           centerTitle: true,
           title: Text("Pokemon Registration"),
         ),
@@ -35,6 +55,7 @@ class RegisterPokemon extends StatelessWidget {
             children: [DrwHeader(), DrwListView()],
           ),
         ),
+
         body: Stack(
           children: [
             SingleChildScrollView(
@@ -44,7 +65,7 @@ class RegisterPokemon extends StatelessWidget {
                 children: [
                   ImgSection(),
                   SizedBox(height: 20),
-                  InptFieldSection(items: items),
+                  InptFieldSection(key: _formKey, items: items, onValidate: () {}),
                   SizedBox(height: 80),
                 ],
               ),
@@ -59,25 +80,30 @@ class RegisterPokemon extends StatelessWidget {
                   ElevatedButton.icon(
                     onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp())),
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                      textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.red[900],
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
+                        padding: const EdgeInsets.all(20),
+                        fixedSize: const Size(150, 60),
+                        textStyle:
+                        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.red[900],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
                     icon: Icon(Icons.arrow_back, color: Colors.white),
                     label: Text('Back'),
                   ),
                   SizedBox(width: 20),
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: validateAndSubmit, // Calls validation
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                      textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.red[900],
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
+                        padding: EdgeInsets.all(20),
+                        fixedSize: Size(150, 60),
+                        textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.red[900],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
                     label: Row(
                       children: [
                         Text('Submit'),
@@ -95,6 +121,7 @@ class RegisterPokemon extends StatelessWidget {
     );
   }
 }
+
 
 class ImgSection extends StatelessWidget {
   const ImgSection({super.key});
@@ -135,31 +162,71 @@ class ImageContainer extends StatelessWidget {
   }
 }
 
-class InptFieldSection extends StatelessWidget {
+class InptFieldSection extends StatefulWidget {
   final List<String> items;
-  const InptFieldSection({super.key, required this.items});
+  final VoidCallback onValidate;
+
+  const InptFieldSection({super.key, required this.items, required this.onValidate});
+
+  @override
+  _InptFieldSectionState createState() => _InptFieldSectionState();
+}
+
+
+class _InptFieldSectionState extends State<InptFieldSection> {
+  final TextEditingController _pokemonName = TextEditingController();
+  bool _validateName = false;
+
+  final TextEditingController _pokemonLevel = TextEditingController();
+  bool _validateLevel = false;
+  String? _levelErrorText;
+
+  void ValidateFields() {
+    setState(() {
+      _validateName = FieldValidators.validatePokemonName(_pokemonName.text) != null;
+      _levelErrorText = FieldValidators.validatePokemonLevel(_pokemonLevel.text);
+      _validateLevel = _levelErrorText != null;
+    });
+    widget.onValidate(); // Notify parent that validation occurred
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextField(
-          style: TextStyle(color: Colors.white, fontSize: 16), // White text, consistent size
+        TextFormField(
+          controller: _pokemonName,
+          keyboardType: TextInputType.text,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+            LengthLimitingTextInputFormatter(50)
+          ],
+          style: TextStyle(color: Colors.white, fontSize: 16),
           decoration: InputDecoration(
+            errorText: _validateName ? 'Pokemon name is required' : null,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.red, width: 2), // Red border
+              borderSide: BorderSide(color: Colors.red, width: 2),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.red, width: 2), // Red border when focused
+              borderSide: BorderSide(color: Colors.red, width: 2),
             ),
-            fillColor: Colors.black, // Black background
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.red, width: 2),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.red, width: 2),
+            ),
+            fillColor: Colors.black,
             filled: true,
             hintText: "Pokemon Name",
-            hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white), // White placeholder
-          ),
+            hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          )
+
         ),
         SizedBox(height: 20),
         Row(
@@ -168,16 +235,16 @@ class InptFieldSection extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  color: Colors.black, // Black background
+                  color: Colors.black,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.red, width: 2), // Red border
+                  border: Border.all(color: Colors.red, width: 2),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton(
-                    dropdownColor: Colors.black, // Black dropdown background
+                    dropdownColor: Colors.black,
                     value: 'Normal',
                     icon: Icon(Icons.arrow_drop_down, color: Colors.red),
-                    items: items.map((String item) {
+                    items: widget.items.map((String item) {
                       return DropdownMenuItem(
                         value: item,
                         child: Text(item, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
@@ -190,23 +257,34 @@ class InptFieldSection extends StatelessWidget {
             ),
             SizedBox(width: 20),
             Expanded(
-              child: TextField(
-                style: TextStyle(color: Colors.white, fontSize: 16), // White text, consistent size
+              child: TextFormField(
+                controller: _pokemonLevel,
+                style: TextStyle(color: Colors.white, fontSize: 16),
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 decoration: InputDecoration(
+                  errorText: _validateLevel ? _levelErrorText : null,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.red, width: 2), // Red border
+                    borderSide: BorderSide(color: Colors.red, width: 2),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.red, width: 2), // Red border when focused
+                    borderSide: BorderSide(color: Colors.red, width: 2),
                   ),
-                  fillColor: Colors.black, // Black background
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Colors.red, width: 2),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Colors.red, width: 2),
+                  ),
+                  fillColor: Colors.black,
                   filled: true,
-                  hintText: "Level",
-                  hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white), // White placeholder
-                ),
+                  hintText: "Pokemon Name",
+                  hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                )
+
               ),
             ),
           ],
@@ -215,3 +293,4 @@ class InptFieldSection extends StatelessWidget {
     );
   }
 }
+

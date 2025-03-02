@@ -153,16 +153,23 @@ class BackButtonSection extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp())),
           style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.all(20),
-            fixedSize: const Size(200, 60),
-            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.red[900],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+              padding: const EdgeInsets.all(20),
+              fixedSize: const Size(150, 60),
+              textStyle:
+              const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.red[900],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              )),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.arrow_back, color: Colors.white),
+              const SizedBox(width: 5),
+              const Text('Back'),
+            ],
           ),
-          child: const Text('Back'),
         ),
       ),
     );
