@@ -182,14 +182,15 @@ class ImgTextSection extends StatelessWidget {
                   onSearch(searchText);
                 },
               ),
-
               filled: true,
-              fillColor: Colors.white38,
+              fillColor: Colors.black,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Colors.red[900]!),
               ),
             ),
           ),
+
           const SizedBox(height: 10),
           Container(
             decoration: BoxDecoration(
@@ -247,8 +248,9 @@ class PokemonDetails extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white38,
+          color: Colors.black54,
           borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.red[900]!, width: 2),
         ),
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -261,7 +263,7 @@ class PokemonDetails extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -271,18 +273,18 @@ class PokemonDetails extends StatelessWidget {
                 children: [
                   Text(
                     'Type: $type',
-                    style: const TextStyle(color: Colors.black),
+                    style: const TextStyle(color: Colors.white),
                   ),
                   Text(
                     'Abilities: $abilities',
-                    style: const TextStyle(color: Colors.black),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ],
               ),
               const SizedBox(height: 10),
               Text(
                 'Description: $description',
-                style: const TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.white),
               ),
             ],
           ),

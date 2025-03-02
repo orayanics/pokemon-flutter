@@ -55,34 +55,41 @@ class GymBadgesSection extends StatelessWidget {
       'Fuchsia': 'assets/badges/fuchsia_badge.png',
     };
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text('Gym Badges', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 16),
-        Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 12,
-          runSpacing: 12,
-          children: badgeImages.entries.map((entry) => Column(
-            children: [
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: Image.asset(
-                  entry.value,
-                  fit: BoxFit.cover
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.red[900]!, width: 3),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('Gym Badges', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 16),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 12,
+            runSpacing: 12,
+            children: badgeImages.entries.map((entry) => Column(
+              children: [
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: Image.asset(
+                      entry.value,
+                      fit: BoxFit.cover
+                  ),
                 ),
-              ),
-              const SizedBox(height: 6),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('${entry.key} Badge'),
-              ),
-            ],
-          )).toList(),
-        ),
-      ],
+                const SizedBox(height: 6),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('${entry.key} Badge'),
+                ),
+              ],
+            )).toList(),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -100,26 +107,37 @@ class HallOfFameSection extends StatelessWidget {
       'Fuchsia': 'Weezing - Poison | Moves: Sludge, Explosion | Trainer: Koga',
     };
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text('Pokémon Hall of Fame', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 16),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: mvpPokemons.length,
-          itemBuilder: (context, index) {
-            final entry = mvpPokemons.entries.elementAt(index);
-            return Card(
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              child: ListTile(
-                title: Text('${entry.key} Gym Most Valuable Pokemon', style: Theme.of(context).textTheme.titleMedium),
-                subtitle: Text(entry.value),
-              ),
-            );
-          },
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.red[900]!, width: 3),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('Pokémon Hall of Fame', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 16),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: mvpPokemons.length,
+            itemBuilder: (context, index) {
+              final entry = mvpPokemons.entries.elementAt(index);
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: ListTile(
+                  title: Text('${entry.key} Gym Most Valuable Pokemon', style: Theme.of(context).textTheme.titleMedium),
+                  subtitle: Text(entry.value),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -135,8 +153,14 @@ class BackButtonSection extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MyApp())),
           style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            padding: const EdgeInsets.all(20),
+            fixedSize: const Size(200, 60),
+            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            foregroundColor: Colors.white,
             backgroundColor: Colors.red[900],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
           child: const Text('Back'),
         ),

@@ -145,13 +145,20 @@ class InptFieldSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white, fontSize: 16), // White text, consistent size
           decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-            fillColor: Colors.white,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.red, width: 2), // Red border
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.red, width: 2), // Red border when focused
+            ),
+            fillColor: Colors.black, // Black background
             filled: true,
             hintText: "Pokemon Name",
-            hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+            hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white), // White placeholder
           ),
         ),
         SizedBox(height: 20),
@@ -161,17 +168,19 @@ class InptFieldSection extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.black, // Black background
                   borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.red, width: 2), // Red border
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton(
+                    dropdownColor: Colors.black, // Black dropdown background
                     value: 'Normal',
                     icon: Icon(Icons.arrow_drop_down, color: Colors.red),
                     items: items.map((String item) {
                       return DropdownMenuItem(
                         value: item,
-                        child: Text(item, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+                        child: Text(item, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                       );
                     }).toList(),
                     onChanged: (String? newValue) {},
@@ -182,14 +191,21 @@ class InptFieldSection extends StatelessWidget {
             SizedBox(width: 20),
             Expanded(
               child: TextField(
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.white, fontSize: 16), // White text, consistent size
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                  fillColor: Colors.white,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Colors.red, width: 2), // Red border
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Colors.red, width: 2), // Red border when focused
+                  ),
+                  fillColor: Colors.black, // Black background
                   filled: true,
                   hintText: "Level",
-                  hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+                  hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white), // White placeholder
                 ),
               ),
             ),
