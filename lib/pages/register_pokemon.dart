@@ -181,13 +181,15 @@ class _InptFieldSectionState extends State<InptFieldSection> {
   bool _validateLevel = false;
   String? _levelErrorText;
 
+  String _selectedType = 'Normal';
+
   void ValidateFields() {
     setState(() {
       _validateName = FieldValidators.validatePokemonName(_pokemonName.text) != null;
       _levelErrorText = FieldValidators.validatePokemonLevel(_pokemonLevel.text);
       _validateLevel = _levelErrorText != null;
     });
-    widget.onValidate(); // Notify parent that validation occurred
+    widget.onValidate();
   }
 
   @override
@@ -242,7 +244,7 @@ class _InptFieldSectionState extends State<InptFieldSection> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton(
                     dropdownColor: Colors.black,
-                    value: 'Normal',
+                    value: _selectedType,
                     icon: Icon(Icons.arrow_drop_down, color: Colors.red),
                     items: widget.items.map((String item) {
                       return DropdownMenuItem(
@@ -250,7 +252,11 @@ class _InptFieldSectionState extends State<InptFieldSection> {
                         child: Text(item, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                       );
                     }).toList(),
-                    onChanged: (String? newValue) {},
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedType = newValue!;
+                      });
+                    },
                   ),
                 ),
               ),
@@ -281,7 +287,7 @@ class _InptFieldSectionState extends State<InptFieldSection> {
                   ),
                   fillColor: Colors.black,
                   filled: true,
-                  hintText: "Pokemon Name",
+                  hintText: "Level",
                   hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                 )
 
